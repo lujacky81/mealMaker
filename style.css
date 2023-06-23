@@ -223,3 +223,24 @@ section {
 .matchform {
     width: 50%;
 }
+
+.grid {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 80%;
+}
+
+.grid__item {
+    display: flex;
+    width: 200px;
+    height: 32px;
+}
+
+.grid__item--icon {
+    margin-right: 8px;
+}
+
+.grid__item--text {
+    align-self: center;
+}
