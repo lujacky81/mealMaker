@@ -1,4 +1,5 @@
 BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
+randomCard();
 
 async function search(event){
     event.preventDefault();
@@ -128,4 +129,7 @@ async function randomCard(){
     document.querySelector(".search__title--text").innerHTML = "Random Result:";
 }
 
-randomCard();
+async function match(event) {
+    event.preventDefault();
+    console.log("matching")
+}
