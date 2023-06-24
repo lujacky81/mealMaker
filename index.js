@@ -1,4 +1,26 @@
 BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
+// const INGREIENTS = fetch("./ingredients.json")
+//     .then((response) => {
+//         return response.json();
+//     })
+//     .then((data) => {
+//         return data
+//     })
+
+// const INGREIENTS = initJSON().then((data) => {
+//     console.log(data);
+//     return data;    
+// });
+
+// async function initJSON(){
+//     const response = await fetch("./ingredients.json");
+//     const data = await response.json();
+//     return data;
+// }
+
+const jsonFile = fetch("./ingredients.json")
+    .then(results => results.json());
+
 randomCard();
 
 async function search(event){
@@ -129,7 +151,12 @@ async function randomCard(){
     document.querySelector(".search__title--text").innerHTML = "Random Result:";
 }
 
-async function match(event) {
+function match(event) {
     event.preventDefault();
-    console.log("matching")
+    // console.log(INGREIENTS.then((data) => {console.log(data)}));
+    //console.log(INGREIENTS.then(console.log));
+    let test;
+    let data = jsonFile.then((data) => {test = data});
+    console.log(test);
+
 }

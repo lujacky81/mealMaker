@@ -225,10 +225,11 @@ section {
 }
 
 .grid {
-    margin-top: 16px;
+    margin-top: 32px;
     display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
-    width: 80%;
+    grid-template-columns: 33% 33% 33%;
+    width: 85%;
+    margin-left: 16%;
 }
 
 .grid__item {
