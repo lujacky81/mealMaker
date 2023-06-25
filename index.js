@@ -1,6 +1,8 @@
 //Global variables:
 let BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
-let CURRENTMATCH = [];
+let CURRENTMATCH = []; // the temporary list of dishes based on the most recent input
+let MATCHES = {}; // dictionary mapping input to all associated dishes
+let MATCHRENDER = []; // the intersect of all of Object.values(MATCHES) that are to be rendered. 
 
 //Functions called one time when page loads:
 randomCard();
@@ -88,8 +90,8 @@ async function randomCard(){
     const url = "https://www.themealdb.com/api/json/v1/1/random.php";
     const response = await fetch(url);
     const data = await response.json();
-    let meal = data.meals[0];
-    console.log(meal);
+    let meal = data["meals"][0];
+    //console.log(meal);
 
     const searchResults = document.querySelector(".searchresults");
 
@@ -139,23 +141,19 @@ function match(event) {
     let input = document.querySelector(".matcher__input").value.trim().toLowerCase();
     document.querySelector(".matcher__input").value = "";
     if (input.length <= 0) {return}
-    if (CURRENTMATCH.includes(input)) {return}
+    if (Object.keys(MATCHES).includes(input)) {return}
 
     let keys = Object.keys(INGREDIENTS);
-    // console.log(keys)
-    // console.log(input);
-    // console.log(keys.includes(input))
-    // console.log(Object.keys(INGREDIENTS).filter(element => element.includes(input)));
+    CURRENTMATCH = [];
 
     if(keys.includes(input)) {
         let newMatch = keys.filter(element => element.includes(input));
-        CURRENTMATCH = CURRENTMATCH.concat(newMatch);
-    } else {
-        let newMatch = [];
-        newMatch.push(input);
-        CURRENTMATCH = CURRENTMATCH.concat(newMatch);
-    }
+        CURRENTMATCH = newMatch;
+        //CURRENTMATCH = CURRENTMATCH.concat(newMatch);
+    } 
     console.log(CURRENTMATCH);
+
+    updateMatches(input);
 
     let gridItem = document.createElement("div");
     gridItem.classList += " grid__item";
@@ -176,21 +174,109 @@ function match(event) {
     gridItem.appendChild(gridImg);
     gridItem.appendChild(gridPara);
 
-    renderMatch(CURRENTMATCH);
+    renderMatch();
 
 }
 
-function renderMatch(current) {
+function updateMatches(input){ // consolidate CURRENTMATCH to 1 key word from input
+    let mealSet = new Set();
+    CURRENTMATCH.forEach((i) => {
+        let temp = INGREDIENTS[i]
+        temp.forEach((id) => {
+            mealSet.add(id);
+        });
+    });
+    let mealList = Array.from(mealSet);
+    MATCHES[input] = mealList;
+    console.log(MATCHES);
 
+}
 
-    // For adding onclick to elements created by DOM:
-    // https://stackoverflow.com/questions/9643311/pass-a-string-parameter-in-an-onclick-function
-    // use for X button on matcher cards
+function renderMatch() {
+    clearMatchResults();
+    let meals = [];
+    let start;
+    let currentValues = Object.values(MATCHES);
+    console.log(currentValues);
+    // Find intersection of all MATCHES.values
+    for (let i = 0; i < currentValues.length; i++){
+        if (currentValues[i].length > 0) {
+            meals = currentValues[i];
+            start = i+1;
+            break;
+        } 
+    }
+    if (meals.length <= 0) {return}
+    //console.log(meals);
+    for (let j = start; j < currentValues.length; j++) {
+        if(currentValues[j].length <= 0) {continue}
+        meals = meals.filter(v => currentValues[j].includes(v));
+    }
+    //console.log(meals);
+    // Render all elements remaining in the intersection
+    meals.forEach(async (m) => {
+        let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + m;
+
+        const response = await fetch(url);
+        const data = await response.json();
+        let meal = data.meals[0];
+        //console.log(meal);
+        let name = meal.strMeal;
+        let src = meal.strMealThumb;
+
+        let grid = document.querySelector(".grid__match");
+
+        let matchResult = document.createElement("div");
+        matchResult.classList += " match__result";
+
+        let matchImg = document.createElement("img");
+        matchImg.classList += "grid__item--icon";
+        matchImg.setAttribute("src", src);
+
+        let matchPara = document.createElement("p");
+        matchPara.classList += " grid__item--text";
+        matchPara.innerHTML = name;
+
+        matchResult.appendChild(matchImg);
+        matchResult.appendChild(matchPara);
+        grid.appendChild(matchResult);
+
+        // fetch(url)
+        //     .then((response) => {
+        //         response.json();
+        //     })
+        //     .then((data) => {
+        //         console.log(data);
+        //         let name = meal["strMeal"];
+        //         let src = meal['strMealThumb'];
+
+        //         let grid = document.querySelector(".grid__match");
+
+        //         let matchResult = document.createElement("div");
+        //         matchResult.classList += " match__result";
+        
+        //         let matchImg = document.createElement("img");
+        //         matchImg.classList += "grid__item--icon";
+        //         matchImg.setAttribute("src", src);
+
+        //         let matchPara = document.createElement("p");
+        //         matchPara.classList += " grid__item--text";
+        //         matchPara.innerHTML = name;
+
+        //         matchResult.appendChild(matchImg);
+        //         matchResult.appendChild(matchPara);
+        //         grid.appendChild(matchResult);
+        //     })
+    });
 
 }
 
 function clearMatcher(){
     document.querySelectorAll('.grid__item').forEach(e => e.remove());
+}
+
+function clearMatchResults(){
+    document.querySelectorAll('.match__result').forEach(e => e.remove());
 }
 
 async function mealById(id){
@@ -207,8 +293,10 @@ function removeGridItem(event) {
     element = event.target;
     parent = element.parentElement;
     let input = parent.id;
-    console.log(input);
 
-
+    delete MATCHES[input];
     parent.remove();
+    console.log(MATCHES);
+    renderMatch();
+    
 }

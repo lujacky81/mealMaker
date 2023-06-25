@@ -130,6 +130,7 @@ section {
     color: white;
     margin-bottom: 8px;
     height: 48px;
+    border-radius: 16px 16px 0px 0px;
 }
 
 .search__title--text{
@@ -203,7 +204,7 @@ section {
 */
 
 .matcher {
-    height: 800px;
+    min-height: 800px;
     width: 100%;
     background-color: #D9A30F;
     align-self: center;
@@ -211,6 +212,7 @@ section {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
 }
 
 .matcher__input {
@@ -245,4 +247,20 @@ section {
 
 .grid__item--text {
     align-self: center;
+    overflow-wrap: break-word;
+    inline-size: 80%;
+}
+
+.grid__match {
+    display: grid;
+    margin-top: 32px;
+    width: 90%;
+    grid-template-columns: 25% 25% 25% 25%;
+}
+
+.match__result {
+    display: flex;
+    height: 48px;
+    width: 100%;
+    margin-top: 16px;
 }
