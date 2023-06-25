@@ -22,7 +22,7 @@ async function search(event){
         url = url + "search.php?s=" + input;
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {mode: 'cors'});
     const data = await response.json();
     let meals = data.meals;
     if (meals === null) {return}
@@ -88,7 +88,7 @@ function clearResults(){
 async function randomCard(){
     clearResults();
     const url = "https://www.themealdb.com/api/json/v1/1/random.php";
-    const response = await fetch(url);
+    const response = await fetch(url, {mode: 'cors'});
     const data = await response.json();
     let meal = data["meals"][0];
     //console.log(meal);
@@ -192,7 +192,7 @@ function updateMatches(input){ // consolidate CURRENTMATCH to 1 key word from in
 
 }
 
-function renderMatch() {
+async function renderMatch() {
     clearMatchResults();
     let meals = [];
     let start;
@@ -217,8 +217,8 @@ function renderMatch() {
     meals.forEach(async (m) => {
         let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + m;
 
-        const response = await fetch(url);
-        const data = await response.json();
+        let response = await fetch(url, {mode: 'cors'});
+        let data = await response.json();
         let meal = data.meals[0];
         //console.log(meal);
         let name = meal.strMeal;
@@ -241,32 +241,6 @@ function renderMatch() {
         matchResult.appendChild(matchPara);
         grid.appendChild(matchResult);
 
-        // fetch(url)
-        //     .then((response) => {
-        //         response.json();
-        //     })
-        //     .then((data) => {
-        //         console.log(data);
-        //         let name = meal["strMeal"];
-        //         let src = meal['strMealThumb'];
-
-        //         let grid = document.querySelector(".grid__match");
-
-        //         let matchResult = document.createElement("div");
-        //         matchResult.classList += " match__result";
-        
-        //         let matchImg = document.createElement("img");
-        //         matchImg.classList += "grid__item--icon";
-        //         matchImg.setAttribute("src", src);
-
-        //         let matchPara = document.createElement("p");
-        //         matchPara.classList += " grid__item--text";
-        //         matchPara.innerHTML = name;
-
-        //         matchResult.appendChild(matchImg);
-        //         matchResult.appendChild(matchPara);
-        //         grid.appendChild(matchResult);
-        //     })
     });
 
 }
@@ -277,16 +251,6 @@ function clearMatcher(){
 
 function clearMatchResults(){
     document.querySelectorAll('.match__result').forEach(e => e.remove());
-}
-
-async function mealById(id){
-    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id;
-
-    let response = await fetch(url);
-    let data = await response.json();
-
-    return data;
-
 }
 
 function removeGridItem(event) {
