@@ -52,7 +52,8 @@ def addToDict(meals):
     for meal in filtered:
         #for each meal
         base = "strIngredient"
-        name = meal['strMeal']
+        #name = meal['strMeal']
+        name = meal['idMeal']
         #print(f'RECIPE NAME: {name}')
         for i in range(1, 21):
             ingredient = base + str(i)

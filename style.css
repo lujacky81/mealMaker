@@ -240,6 +240,7 @@ section {
 
 .grid__item--icon {
     margin-right: 8px;
+    cursor: pointer;
 }
 
 .grid__item--text {

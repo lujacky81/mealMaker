@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
-    <!-- <script src="./ingredients.json" type="text/javascript"></script> -->
+    <script src="./ingredients.js"></script>
     <script src="./index.js"></script>
     <script src="https://kit.fontawesome.com/c5dbb464d1.js" crossorigin="anonymous"></script>
     <title>Meal Maker</title>
@@ -22,7 +22,7 @@
                 class="searchbar__input"
                 placeholder=" search . . ."
               />
-              <input type="image" src="./assests/magnifying-glass-solid.svg"
+              <input type="image" src="./assets/magnifying-glass-solid.svg"
               alt=""
               class="searchbar__icon">
             </form>
@@ -31,7 +31,7 @@
           <div class="searchresults">
             <div class="search__title">
                 <h1 class="search__title--text off-white">Random Result:</h1>
-                <img class="random click" onclick="randomCard()"src="./assests/shuffle-solid.svg"/>
+                <img class="random click" onclick="randomCard()"src="./assets/shuffle-solid.svg"/>
               
             </div>
             <!-- ITEMS START -->
@@ -69,6 +69,13 @@
         <div class="container">
           <div class="row">
             <div class="matcher">
+
+              <div class="search__title">
+                <h1 class="search__title--text off-white">Ingredient Matcher:</h1>
+                <img class="random click" onclick="clearMatcher()"src="./assets/square-xmark-solid.svg"/>
+              
+            </div>
+
               <form onsubmit="match(event)" class="matchform">
                 <input class="matcher__input" type="text" placeholder="Input your ingredients . . .">
               </form>
@@ -76,37 +83,7 @@
               <div class="grid">
                 
                 <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text"></p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text">testing</p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text">testing</p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text">testing</p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text">testing</p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
-                  <p class="grid__item--text">testing</p>
-                </div>
-
-                <div class="grid__item">
-                  <img src="./assests/xmark-solid.svg" class="grid__item--icon">
+                  <img src="./assets/xmark-solid.svg" class="grid__item--icon" onclick="selfRemove(this)">
                   <p class="grid__item--text">testing</p>
                 </div>
 

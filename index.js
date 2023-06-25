@@ -1,27 +1,10 @@
-BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
-// const INGREIENTS = fetch("./ingredients.json")
-//     .then((response) => {
-//         return response.json();
-//     })
-//     .then((data) => {
-//         return data
-//     })
+//Global variables:
+let BASE_URL = "https://www.themealdb.com/api/json/v1/1/";
+let CURRENTMATCH = [];
 
-// const INGREIENTS = initJSON().then((data) => {
-//     console.log(data);
-//     return data;    
-// });
-
-// async function initJSON(){
-//     const response = await fetch("./ingredients.json");
-//     const data = await response.json();
-//     return data;
-// }
-
-const jsonFile = fetch("./ingredients.json")
-    .then(results => results.json());
-
+//Functions called one time when page loads:
 randomCard();
+//
 
 async function search(event){
     event.preventDefault();
@@ -60,7 +43,7 @@ async function search(event){
         cardTitle.innerHTML = meal.strMeal;
 
         let cardDesc = document.createElement("ul");
-        cardDesc.classList += "card__desc";
+        cardDesc.classList += " card__desc";
 
         searchResults.appendChild(card);
         card.appendChild(cardImg);
@@ -92,7 +75,6 @@ async function search(event){
 
 function clearResults(){
     document.querySelectorAll('.card').forEach(e => e.remove());
-
 
     // let searchResults = document.querySelector(".searchresults");
     // //console.log(searchResults.childNOdes);
@@ -153,10 +135,80 @@ async function randomCard(){
 
 function match(event) {
     event.preventDefault();
-    // console.log(INGREIENTS.then((data) => {console.log(data)}));
-    //console.log(INGREIENTS.then(console.log));
-    let test;
-    let data = jsonFile.then((data) => {test = data});
-    console.log(test);
 
+    let input = document.querySelector(".matcher__input").value.trim().toLowerCase();
+    document.querySelector(".matcher__input").value = "";
+    if (input.length <= 0) {return}
+    if (CURRENTMATCH.includes(input)) {return}
+
+    let keys = Object.keys(INGREDIENTS);
+    // console.log(keys)
+    // console.log(input);
+    // console.log(keys.includes(input))
+    // console.log(Object.keys(INGREDIENTS).filter(element => element.includes(input)));
+
+    if(keys.includes(input)) {
+        let newMatch = keys.filter(element => element.includes(input));
+        CURRENTMATCH = CURRENTMATCH.concat(newMatch);
+    } else {
+        let newMatch = [];
+        newMatch.push(input);
+        CURRENTMATCH = CURRENTMATCH.concat(newMatch);
+    }
+    console.log(CURRENTMATCH);
+
+    let gridItem = document.createElement("div");
+    gridItem.classList += " grid__item";
+    gridItem.setAttribute("id", input);
+
+    let gridImg = document.createElement("img");
+    gridImg.classList += " grid__item--icon";
+    gridImg.setAttribute("src", "./assets/xmark-solid.svg");
+    gridImg.addEventListener('click', removeGridItem);
+    
+
+    let gridPara = document.createElement("p");
+    gridPara.classList += " grid__item--text";
+    gridPara.innerHTML = input;
+
+    let grid = document.querySelector(".grid");
+    grid.appendChild(gridItem);
+    gridItem.appendChild(gridImg);
+    gridItem.appendChild(gridPara);
+
+    renderMatch(CURRENTMATCH);
+
+}
+
+function renderMatch(current) {
+
+
+    // For adding onclick to elements created by DOM:
+    // https://stackoverflow.com/questions/9643311/pass-a-string-parameter-in-an-onclick-function
+    // use for X button on matcher cards
+
+}
+
+function clearMatcher(){
+    document.querySelectorAll('.grid__item').forEach(e => e.remove());
+}
+
+async function mealById(id){
+    let url = "https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + id;
+
+    let response = await fetch(url);
+    let data = await response.json();
+
+    return data;
+
+}
+
+function removeGridItem(event) {
+    element = event.target;
+    parent = element.parentElement;
+    let input = parent.id;
+    console.log(input);
+
+
+    parent.remove();
 }
